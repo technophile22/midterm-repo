@@ -2,18 +2,22 @@ package com.example.midterm_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etname, etage, etgender;
-    Button btnsave;
+
+
+    FloatingActionButton fab;
     ListView listView;
     String name, age, gender;
     ArrayList< LvItem > arrayList = new ArrayList<>();
@@ -23,28 +27,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etname = findViewById(R.id.etname);
-        etage = findViewById(R.id.etage);
-        etgender = findViewById(R.id.etgender);
-        listView = findViewById(R.id.lv);
 
-        btnsave.setOnClickListener(new View.OnClickListener() {
+        listView = findViewById(R.id.lv);
+        fab = findViewById(R.id.flot);
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = etname.getText().toString();
-                age = etage.getText().toString();
-                gender = etgender.getText().toString();
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.fabitem);
+                final EditText etname = dialog.findViewById(R.id.etname);
+                final EditText etgender = dialog.findViewById(R.id.etgender);
+                final EditText etage = dialog.findViewById(R.id.etage);
+                Button btnsave = dialog.findViewById(R.id.btnsave);
 
-                LvItem lvItem = new LvItem();
-                lvItem.setName(name);
-                lvItem.setGender(gender);
-                lvItem.setAge(age);
-                arrayList.add(lvItem);
 
-                ContactAdapter contactAdapter = new ContactAdapter(arrayList, MainActivity.this);
-                listView.setAdapter(contactAdapter);
+
+                btnsave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        name = etname.getText().toString();
+                        age = etage.getText().toString();
+                        gender = etgender.getText().toString();
+
+                        LvItem lvItem = new LvItem();
+                        lvItem.setName(name);
+                        lvItem.setGender(gender);
+                        lvItem.setAge(age);
+                        arrayList.add(lvItem);
+                        dialog.dismiss();
+
+                        ContactAdapter contactAdapter = new ContactAdapter(arrayList, MainActivity.this);
+                        listView.setAdapter(contactAdapter);
+
+                    }
+                });
+                dialog.show();
+
             }
         });
+
 
     }
 }
